@@ -3,6 +3,10 @@ import { Component, OnInit } from '@angular/core';
 import { Cafe } from '../cafe';
 import { CafeService } from '../cafe.service';
 
+/** Tipos de café que ofrece la tienda. */
+export const TIPO_ORIGEN = 'Café de Origen';
+export const TIPO_BLEND = 'Blend';
+
 // Listado de las variedades de café de la tienda en una tabla de Bootstrap.
 @Component({
   selector: 'app-cafe-listar',
@@ -12,6 +16,8 @@ import { CafeService } from '../cafe.service';
 })
 export class CafeListarComponent implements OnInit {
   cafes: Cafe[] = [];
+  totalOrigen = 0;
+  totalBlend = 0;
 
   constructor(private cafeService: CafeService) { }
 
@@ -24,6 +30,15 @@ export class CafeListarComponent implements OnInit {
   getCafes(): void {
     this.cafeService.getCafes().subscribe(cafes => {
       this.cafes = cafes;
+      this.contarPorTipo();
     });
+  }
+
+  /**
+   * Calcula cuántas variedades hay de cada tipo a partir del listado recibido
+   */
+  contarPorTipo(): void {
+    this.totalOrigen = this.cafes.filter(cafe => cafe.tipo === TIPO_ORIGEN).length;
+    this.totalBlend = this.cafes.filter(cafe => cafe.tipo === TIPO_BLEND).length;
   }
 }
